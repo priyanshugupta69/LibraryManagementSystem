@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from fastapi import Path, Body
+from fastapi import Path, Body, Query
 
 
 from models.students import Student
@@ -10,10 +10,19 @@ from bson import ObjectId
 
 studentRouter = APIRouter()
 
-@studentRouter.get('/')
-async def getStudents():
+@studentRouter.get('/', status_code=200)
+async def getStudents(country: str = Query(None), min_age: int = Query(None)):
     try:
-       students = serialize_students(student_collection.find({}, {"name" : 1 , "age" : 1, "_id" : 0}))
+       query = {}
+
+        # Add filters based on query parameters
+       if country:
+            query['address.country'] =  {"$regex": f"^{country}$", "$options": "i"}
+
+       if min_age is not None:
+            query['age'] = {"$gte": min_age}
+
+       students = serialize_students(student_collection.find(query, {"name" : 1 , "age" : 1, "_id" : 0}))
        return {"data" : students}
     except Exception as e:
        raise HTTPException(status_code=500, detail=str(e))
