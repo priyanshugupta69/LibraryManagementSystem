@@ -15,6 +15,8 @@ def serialize_student(student) -> dict:
         serialized_student["address"] = student["address"]
 
     return serialized_student
+
+
 def serialize_students(students) -> list:
     return[
         serialize_student(student) for student in students
