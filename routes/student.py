@@ -44,7 +44,7 @@ async def postStudent(student : Student):
 @studentRouter.get('/{id}', status_code=200)
 async def getStudent(id: str = Path(...)):
     try:
-       student = serialize_student(student_collection.find_one({"_id" : ObjectId(id) }))
+       student = serialize_student(student_collection.find_one({"_id" : ObjectId(id) } , {"_id" : 0}))
        return student
     except:
        raise HTTPException(status_code=404, detail="Item not found")
@@ -60,6 +60,8 @@ async def patchStudent(id : str = Path(...), updatedfields : dict = Body):
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=str(e))
+    
+
 @studentRouter.delete('/{id}', status_code= 200)
 async def deleteStudent(id : str = Path(...)):
     try:
