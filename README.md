@@ -1,5 +1,5 @@
 
-# Libarary Management System(Comsocloud Hiring Challenge)
+# Libarary Management System
 This is a fastapi app that lets you create, get, update and delete student data. 
 
 
